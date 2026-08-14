@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>⛺ 呼和浩特 · 2天1晚亲子游</title>
+<style>
+:root {
+  --bg: #f4f7f0; --card: #fff; --text: #1f2a20; --muted: #5a6a5a;
+  --grass: #2f7d4f; --sky: #1d6fa5; --gold: #c98a1a;
+  --milk: #b7801f; --fire: #c44536;
+  --border: #dce4dc;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+  padding: 12px; -webkit-text-size-adjust: 100%;
+}
+.container { max-width: 800px; margin: 0 auto; }
+
+.header {
+  background: linear-gradient(135deg, #14532d, #2f7d4f, #1d6fa5);
+  color: #fff; padding: 22px 20px 18px; border-radius: 18px; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+}
+.header::after {
+  content: '🐎'; position: absolute; right: 16px; bottom: 6px; font-size: 50px; opacity: 0.15;
+}
+.header h1 { font-size: 22px; position: relative; z-index: 1; }
+.header .sub { opacity: 0.9; font-size: 12px; margin-top: 4px; position: relative; z-index: 1; }
+.header .meta-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; position: relative; z-index: 1; }
+.header .meta-row span {
+  background: rgba(255,255,255,0.18); padding: 4px 12px;
+  border-radius: 14px; font-size: 11px; font-weight: 600;
+}
+
+.hero-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--card); border-radius: 12px; padding: 14px 10px; text-align: center;
+  border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.stat-card .sv { font-size: 22px; font-weight: 800; }
+.stat-card .sv.o { color: var(--grass); } .stat-card .sv.t { color: var(--sky); }
+.stat-card .sv.b { color: var(--gold); } .stat-card .sv.r { color: var(--fire); }
+.stat-card .sl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 500px) { .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 6px; margin-bottom: 14px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px;
+}
+.tab {
+  flex: 1 0 auto; padding: 11px 14px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card);
+  font-size: 13px; font-weight: 700; white-space: nowrap;
+  cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
+}
+.tab.active { background: linear-gradient(135deg, #14532d, #2f7d4f); color: #fff; border-color: #14532d; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 14px; padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid var(--border); margin-bottom: 12px;
+}
+.card h3 { font-size: 15px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 6px; }
+
+/* Train cards */
+.train-card {
+  background: linear-gradient(135deg, #eff7f1, #f0f9f5);
+  border: 1.5px solid #bcdcc6; border-radius: 12px; padding: 14px 16px;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 12px; overflow-x: auto;
+}
+.train-seg { text-align: center; flex-shrink: 0; }
+.train-seg .ts-city { font-weight: 800; font-size: 16px; }
+.train-seg .ts-time { font-size: 11px; color: var(--muted); }
+.train-seg .ts-station { font-size: 10px; color: var(--muted); }
+.train-arrow { font-size: 22px; color: var(--sky); flex-shrink: 0; }
+.train-info {
+  flex: 1; min-width: 0; text-align: center; font-size: 11px;
+  background: #fff; border-radius: 8px; padding: 8px 12px;
+}
+.train-info .ti-num { font-weight: 800; font-size: 15px; color: var(--grass); }
+.train-info .ti-detail { color: var(--muted); margin-top: 2px; }
+
+/* Hotel row */
+.hotel-row {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: #fafdf8; border-radius: 10px; margin-bottom: 8px; font-size: 12px;
+  border: 1px solid #e8edf0; flex-wrap: wrap;
+}
+.hotel-row .hn { font-weight: 700; font-size: 13px; min-width: 140px; }
+.hotel-row .hd { color: var(--muted); flex: 1; }
+.hotel-row .ht { font-size: 10px; color: var(--grass); font-weight: 600; white-space: nowrap; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 10px; top: 4px; bottom: 4px;
+  width: 2.5px; background: linear-gradient(to bottom, var(--grass), var(--sky), var(--gold), var(--fire));
+  border-radius: 2px;
+}
+.tl-block { margin-bottom: 14px; }
+.tl-block:last-child { margin-bottom: 0; }
+.tl-time {
+  position: relative; font-size: 12px; font-weight: 700; color: var(--grass); margin-bottom: 4px;
+}
+.tl-time::before {
+  content: ''; position: absolute; left: -22px; top: 4px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--grass); border: 2.5px solid #fff;
+  box-shadow: 0 0 0 2px var(--grass);
+}
+.tl-card {
+  background: #f5f9f5; border-radius: 10px; padding: 10px 14px;
+  border: 1px solid #dce8dd; font-size: 12px;
+}
+.tl-card .tl-title { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+.tl-card .tl-detail { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.tl-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 8px;
+  font-size: 10px; font-weight: 600; margin-right: 4px;
+}
+.tl-tag.food { background: #fef3c7; color: #92400e; }
+.tl-tag.play { background: #dbeafe; color: #1e40af; }
+.tl-tag.view { background: #d1fae5; color: #065f46; }
+.tl-tag.transit { background: #fce7f3; color: #9d174d; }
+.tl-tag.rest { background: #e0e7ff; color: #3730a3; }
+.tl-tag.grass { background: #dcfce7; color: #166534; }
+.tl-tag.hotel { background: #f3e8ff; color: #7c3aed; }
+.tl-tag.museum { background: #fef9c3; color: #a16207; }
+
+/* Day cards */
+.day-card {
+  background: var(--card); border-radius: 14px; overflow: hidden;
+  margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+.day-header {
+  padding: 12px 16px; font-weight: 700; font-size: 15px; color: #fff;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.day-header.d1 { background: linear-gradient(135deg, #166534, #2f7d4f); }
+.day-header.d2 { background: linear-gradient(135deg, #1d6fa5, #c98a1a); }
+.day-header .dt { font-size: 11px; opacity: 0.85; }
+.day-body { padding: 14px 16px; }
+.day-row {
+  display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f0f4f0;
+  align-items: flex-start; font-size: 12px;
+}
+.day-row:last-child { border-bottom: none; }
+.day-row .dr-time { min-width: 74px; font-weight: 700; font-size: 11px; color: var(--grass); padding-top: 1px; }
+.day-row .dr-content { flex: 1; line-height: 1.7; }
+.day-highlight {
+  margin-top: 10px; padding: 10px 14px; background: #fefce8;
+  border-radius: 10px; border-left: 3px solid var(--gold); font-size: 11px;
+  color: var(--muted); line-height: 1.7;
+}
+.day-highlight strong { color: #92400e; }
+.warn-note {
+  margin-top: 10px; padding: 10px 14px; background: #fef2f2;
+  border-radius: 10px; border-left: 3px solid #dc2626; font-size: 11px;
+  color: #7f1d1d; line-height: 1.7;
+}
+.hotel-note {
+  margin-top: 8px; padding: 8px 14px; background: #f5f3ff;
+  border-radius: 10px; border-left: 3px solid #7c3aed; font-size: 11px;
+  color: var(--muted);
+}
+
+/* Budget */
+.budget-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.budget-table th { background: #f0f7f0; padding: 6px 10px; text-align: left; font-weight: 600; font-size: 10px; color: var(--muted); letter-spacing: 0.04em; }
+.budget-table td { padding: 7px 10px; border-bottom: 1px solid #edf2ed; }
+.budget-table tr:last-child td { border-bottom: none; }
+.budget-table .bt-amount { text-align: right; font-weight: 600; white-space: nowrap; }
+.budget-table .bt-total td { font-size: 16px; font-weight: 800; color: var(--fire); border-top: 2px solid var(--border); }
+.budget-table .bt-sub td { font-weight: 700; color: var(--grass); border-top: 1px solid var(--border); }
+
+/* Tips */
+.tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 500px) { .tip-grid { grid-template-columns: 1fr; } }
+.tip-card {
+  background: var(--card); border-radius: 12px; padding: 14px;
+  border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.tip-card h4 { font-size: 13px; margin-bottom: 6px; }
+.tip-card p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 7px 0; border-bottom: 1px solid #edf2ed; font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
+.checklist li:last-child { border-bottom: none; }
+.checklist .box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #cbd5e0; flex-shrink: 0; margin-top: 1px; }
+
+.highlight-box {
+  background: linear-gradient(135deg, #14532d, #2f7d4f);
+  color: #fff; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+}
+.highlight-box h3 { color: #bbf7d0; border-bottom-color: rgba(255,255,255,0.2); }
+
+.footer { text-align: center; color: var(--muted); font-size: 10px; padding: 16px; margin-top: 4px; }
+.tab { -webkit-tap-highlight-color: transparent; user-select: none; }
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .tabs { display: none; }
+  .tab-content { display: block !important; page-break-before: always; }
+  .tab-content:first-of-type { page-break-before: avoid; }
+  .card, .day-card, .tip-card { box-shadow: none; break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<div class="header">
+  <h1>⛺ 呼和浩特 · 2天1晚亲子游</h1>
+  <div class="sub">两大一小 · 8月15日(周五)→8月16日(周六) · 清河出发 → 大召塞上老街 → 内蒙古博物院 → 返京</div>
+  <div class="meta-row">
+    <span>📅 8/15（周五）→ 8/16（周六）</span>
+    <span>👨‍👩‍👦 2大1小</span>
+    <span>🚄 D1057 / D1022</span>
+    <span>🏨 呼和浩特东站·欢阁酒店</span>
+    <span>⛺ 草原初体验</span>
+  </div>
+</div>
+
+<!-- ═══════════ HERO STATS ═══════════ -->
+<div class="hero-stats">
+  <div class="stat-card"><div class="sv o">2天</div><div class="sl">行程</div></div>
+  <div class="stat-card"><div class="sv t">1晚</div><div class="sl">住宿</div></div>
+  <div class="stat-card"><div class="sv b">⛺</div><div class="sl">大召+博物院</div></div>
+  <div class="stat-card"><div class="sv r">≈2.5k</div><div class="sl">预算</div></div>
+</div>
+
+<!-- ═══════════ TABS ═══════════ -->
+<div class="tabs">
+  <div class="tab active" data-tab="overview" onclick="switchTab('overview')">🗺️ 行程总览</div>
+  <div class="tab" data-tab="daily" onclick="switchTab('daily')">📅 每日详情</div>
+  <div class="tab" data-tab="budget" onclick="switchTab('budget')">💰 预算清单</div>
+  <div class="tab" data-tab="tips" onclick="switchTab('tips')">📋 出行贴士</div>
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB 1: OVERVIEW                 -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-overview" class="tab-content active">
+
+  <!-- Trains -->
+  <div class="card" style="text-align:center">
+    <h3 style="justify-content:center;border:none;margin-bottom:6px">🚄 往返动车</h3>
+    <div class="train-card">
+      <div class="train-seg"><div class="ts-city">清河</div><div class="ts-time">07:38</div><div class="ts-station">8月15日 周五</div></div>
+      <div class="train-arrow">→</div>
+      <div class="train-info"><div class="ti-num">D1057 次</div><div class="ti-detail">动车 · 约 2h28min · 二等座 ≈¥191/成人</div></div>
+      <div class="train-arrow">→</div>
+      <div class="train-seg"><div class="ts-city">呼和浩特东</div><div class="ts-time">10:06</div><div class="ts-station">新城区 · 酒店旁</div></div>
+    </div>
+    <div class="train-card">
+      <div class="train-seg"><div class="ts-city">呼和浩特</div><div class="ts-time">20:03</div><div class="ts-station">8月16日 周六</div></div>
+      <div class="train-arrow">→</div>
+      <div class="train-info"><div class="ti-num">D1022 次</div><div class="ti-detail">动车 · 约 2h41min · 二等座 ≈¥191/成人</div></div>
+      <div class="train-arrow">→</div>
+      <div class="train-seg"><div class="ts-city">北京北</div><div class="ts-time">22:44</div><div class="ts-station">到家</div></div>
+    </div>
+    <div class="warn-note" style="text-align:left">
+      ⚠️ <strong>注意发车站：</strong>去程从 <strong>清河站</strong> 发车（海淀区，非北京北）；返程 D1022 从 <strong>呼和浩特站</strong>（老城区）发车，<strong>不是呼和浩特东站</strong>！返程需预留从酒店（东站旁）到呼和浩特站的时间。以上时刻以 12306 实时为准。
+    </div>
+  </div>
+
+  <!-- Hotels -->
+  <div class="card">
+    <h3>🏨 住宿安排</h3>
+    <div class="hotel-row"><div class="hn">🏨 欢阁酒店</div><div class="hd">呼和浩特东站 · 内蒙古博物院旁 · 新城区新华东街 · 地铁1号线呼和浩特东站F口步行可达</div><div class="ht">8/15 入住 → 8/16 退房</div></div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">💡 酒店夹在<strong>呼和浩特东站</strong>与<strong>内蒙古博物院新馆</strong>之间，到站即到店、出门即进馆，1晚不用折腾行李</div>
+  </div>
+
+  <!-- Summary Timeline -->
+  <div class="card">
+    <h3>🗺️ 两天速览</h3>
+    <div class="timeline">
+      <div class="tl-block">
+        <div class="tl-time">Day 1 · 8/15 周五 · 抵达 + 老城藏传佛教线</div>
+        <div class="tl-card"><div class="tl-title">🚄 D1057 清河→呼和浩特东 → 🏨欢阁酒店 → 🏛️大召寺 → 🏮塞上老街 → 🗼五塔寺</div>
+        <div class="tl-detail"><span class="tl-tag transit">高铁</span><span class="tl-tag view">古寺</span><span class="tl-tag food">烧麦</span><span class="tl-tag hotel">欢阁</span>10:06到站，先去酒店放行李，午餐吃羊肉烧麦，下午逛玉泉区老城，晚上塞上老街夜景+铜锅涮肉</div></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">Day 2 · 8/16 周六 · 博物院 + 草原/青冢 + 返京</div>
+        <div class="tl-card"><div class="tl-title">🦖内蒙古博物院 → 🎨美术馆 → ⛺敕勒川草原(或青冢) → 🚇地铁1号线→呼和浩特站 → 🚄D1022返京</div>
+        <div class="tl-detail"><span class="tl-tag museum">博物院</span><span class="tl-tag grass">草原</span><span class="tl-tag transit">地铁</span>上午酒店旁的博物院（恐龙化石孩子最爱），下午草原奔跑或看青冢，傍晚地铁1号线直达呼和浩特站赶20:03的车</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Highlight -->
+  <div class="highlight-box">
+    <h3>🦖 Day 2 亮点：内蒙古博物院（新馆）</h3>
+    <p style="font-size:12px;opacity:0.9;line-height:1.8;margin-top:4px">
+      📍 <strong>新华东街76号</strong>（酒店步行/地铁1号线1站可达）<br>
+      🎫 <strong>免费</strong> · 需预约 · 周二至周日 9:00-17:00（暑期延时至18:00，以公告为准）<br>
+      🦕 巨型恐龙化石 + 草原游牧文明展，<strong>孩子的最爱</strong><br>
+      👦 <strong>16岁以下未成年人免预约</strong>，直接跟大人入馆<br>
+      🎨 隔壁就是<strong>内蒙古美术馆</strong>（免费），顺路一起逛
+    </p>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB 2: DAILY DETAIL             -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-daily" class="tab-content">
+
+  <!-- Day 1 -->
+  <div class="day-card">
+    <div class="day-header d1"><div>🌿 Day 1 · 8月15日 周五</div><div class="dt">抵达 + 大召塞上老街</div></div>
+    <div class="day-body">
+      <div class="day-row"><div class="dr-time">06:30</div><div class="dr-content">🚕 出发前往<strong>清河站</strong>（海淀区 · 地铁13号线/昌平线）</div></div>
+      <div class="day-row"><div class="dr-time">07:38</div><div class="dr-content">🚄 <strong>D1057 次</strong> 清河→呼和浩特东 · 动车 · 2h28min</div></div>
+      <div class="day-row"><div class="dr-time">10:06</div><div class="dr-content">🚄 <strong>抵达呼和浩特东站</strong>（新城区）</div></div>
+      <div class="day-row"><div class="dr-time">10:20</div><div class="dr-content">🏨 <strong>欢阁酒店</strong> 办理入住/寄存行李（酒店就在东站旁，博物院附近）</div></div>
+      <div class="day-row"><div class="dr-time">11:00</div><div class="dr-content">🥟 <strong>午餐：羊肉烧麦</strong>！—— 呼和浩特招牌早点/正餐。<strong>德顺源</strong>或<strong>老绥元烧麦</strong>（连锁品质稳），配砖茶解腻</div></div>
+      <div class="day-row"><div class="dr-time">12:30</div><div class="dr-content">🚕 打车前往<strong>玉泉区大召</strong>（约20-25分钟，¥15-25）</div></div>
+      <div class="day-row"><div class="dr-time">13:00</div><div class="dr-content">🏛️ <strong>大召寺</strong>（大召无量寺 ¥35/成人）—— 呼和浩特地标，藏传佛教古寺，转经筒+银佛龙雕，孩子可以喂广场鸽子</div></div>
+      <div class="day-row"><div class="dr-time">14:30</div><div class="dr-content">🏮 <strong>塞上老街</strong>（免费）—— 大召寺旁明清古街，小吃+蒙古手工艺品。奶皮子、奶酪、风干牛肉边逛边买</div></div>
+      <div class="day-row"><div class="dr-time">15:30</div><div class="dr-content">🗼 <strong>五塔寺</strong>（金刚座舍利宝塔 ¥30/成人）—— 大召附近步行可达，镇馆之宝是<strong>蒙文天文图</strong></div></div>
+      <div class="day-row"><div class="dr-time">16:30</div><div class="dr-content">🍵 <strong>通顺大巷 / 大召广场</strong>闲逛歇脚，来碗<strong>蒙古奶茶</strong>+奶豆腐</div></div>
+      <div class="day-row"><div class="dr-time">18:00</div><div class="dr-content">🍲 <strong>晚餐：额尔敦铜锅涮羊肉</strong>（呼和浩特必吃！手切鲜羊肉+芝麻酱）或 <strong>西贝莜面村</strong>（莜面窝窝+羊肉汤，孩子友好）</div></div>
+      <div class="day-row"><div class="dr-time">19:30</div><div class="dr-content">🌃 <strong>大召寺夜景</strong>—— 晚上亮灯很漂亮，塞上老街也热闹，饭后消食</div></div>
+      <div class="day-row"><div class="dr-time">20:30</div><div class="dr-content">🚕 打车回酒店（约20-25分钟）</div></div>
+      <div class="day-highlight">
+        💡 <strong>Tips：</strong>大召寺 → 塞上老街 → 五塔寺全程<strong>步行串联</strong>（玉泉区老城连成一片），不绕路。8月草原<strong>早晚温差大</strong>，傍晚回程给孩子带件薄外套。
+      </div>
+      <div class="hotel-note">🏨 <strong>今晚住宿：呼和浩特东站·内蒙古博物院·欢阁酒店</strong> ｜ 新城区新华东街 · 地铁1号线呼和浩特东站F口旁</div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-card">
+    <div class="day-header d2"><div>🐎 Day 2 · 8月16日 周六</div><div class="dt">博物院 + 草原/青冢 + 返京</div></div>
+    <div class="day-body">
+      <div class="day-row"><div class="dr-time">08:00</div><div class="dr-content">🥛 <strong>早餐</strong>：蒙古奶茶 + 焙子 + 羊杂碎（当地吃法），孩子可选羊肉包子</div></div>
+      <div class="day-row"><div class="dr-time">08:40</div><div class="dr-content">🏨 退房，行李寄存前台（东站旁，取行李方便）</div></div>
+      <div class="day-row"><div class="dr-time">09:00</div><div class="dr-content">🦖 <strong>内蒙古博物院（新馆）</strong>（🆓免费，成人需预约）—— 就在酒店旁！巨型恐龙化石+草原游牧文明，孩子最爱。重点看二层恐龙馆+草原文化馆，约2-2.5h</div></div>
+      <div class="day-row"><div class="dr-time">11:30</div><div class="dr-content">🎨 <strong>内蒙古美术馆</strong>（免费，隔壁，可选）—— 时间紧可跳过</div></div>
+      <div class="day-row"><div class="dr-time">12:30</div><div class="dr-content">🍜 <strong>午餐</strong>：东站/新华东街附近，或去市区吃莜面</div></div>
+
+      <!-- 二选一 -->
+      <div style="background:#fefce8;border-radius:10px;padding:10px 14px;margin-bottom:10px;border-left:3px solid #f59e0b;font-size:12px;line-height:1.7">
+        <strong>🔀 下午二选一：</strong> 孩子想撒欢选 <strong style="color:#166534">A 敕勒川草原</strong>（免费，阴山脚下奔跑）；想逛人文选 <strong style="color:#1e40af">B 昭君博物院</strong>（青冢，¥60/成人）
+      </div>
+
+      <div class="day-row"><div class="dr-time">13:30</div><div class="dr-content">🚕 <strong>方案A</strong>：打车去<strong>敕勒川草原</strong>（约30分钟，免费）—— 阴山脚下大草原，孩子奔跑放风筝，拍照绝佳 ｜ <strong>方案B</strong>：打车去<strong>昭君博物院</strong>（青冢，约30-40分钟，¥60/成人）—— 王昭君墓，草原人文</div></div>
+      <div class="day-row"><div class="dr-time">16:00</div><div class="dr-content">🚕 返回酒店取行李</div></div>
+      <div class="day-row"><div class="dr-time">16:30</div><div class="dr-content">🚇 <strong>地铁1号线</strong> 呼和浩特东站→呼和浩特站（约30分钟）或打车（约30-40分钟，¥30-40）</div></div>
+      <div class="day-row"><div class="dr-time">17:30</div><div class="dr-content">🍽️ 呼和浩特站附近晚餐（或买烧麦/焙子带高铁上吃）</div></div>
+      <div class="day-row"><div class="dr-time">19:15</div><div class="dr-content">📌 <strong>抵达呼和浩特站候车</strong>—— 距发车约50分钟，从容</div></div>
+      <div class="day-row"><div class="dr-time">20:03</div><div class="dr-content">🚄 <strong>D1022 次</strong> 呼和浩特→北京北 · 动车 · 2h41min</div></div>
+      <div class="day-row"><div class="dr-time">22:44</div><div class="dr-content">🏠 <strong>抵达北京北站</strong>，回家～🎉</div></div>
+
+      <div class="warn-note">
+        ⚠️ <strong>重要：</strong>返程 D1022 从 <strong>呼和浩特站</strong>（老城区，地铁1号线）发车，<strong>不是呼和浩特东站</strong>！别跑错站。地铁1号线把呼和浩特东站和呼和浩特站连成一线，提前留 1.5h 赶路最稳妥。
+      </div>
+      <div class="hotel-note">🏨 今日无住宿 ｜ 🏠 22:44 到家</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB 3: BUDGET                   -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-budget" class="tab-content">
+
+  <div class="card"><h3>🚄 动车</h3>
+  <table class="budget-table">
+    <tr><th>项目</th><th>单价</th><th>数量</th><th class="bt-amount">金额</th></tr>
+    <tr><td>D1057 清河→呼和浩特东 成人</td><td>≈¥191</td><td>×2</td><td class="bt-amount">¥382</td></tr>
+    <tr><td>D1057 儿童票（半价）</td><td>≈¥95</td><td>×1</td><td class="bt-amount">¥95</td></tr>
+    <tr><td>D1022 呼和浩特→北京北 成人</td><td>≈¥191</td><td>×2</td><td class="bt-amount">¥382</td></tr>
+    <tr><td>D1022 儿童票（半价）</td><td>≈¥95</td><td>×1</td><td class="bt-amount">¥95</td></tr>
+    <tr class="bt-sub"><td colspan="3">🚄 动车小计</td><td class="bt-amount">≈¥954</td></tr>
+  </table></div>
+
+  <div class="card"><h3>🏨 住宿 · 1晚</h3>
+  <table class="budget-table">
+    <tr><th>酒店</th><th>日期</th><th>估算</th><th class="bt-amount">金额</th></tr>
+    <tr><td>欢阁酒店（呼和浩特东站·博物院）</td><td>8/15（1晚）</td><td>≈¥400-500</td><td class="bt-amount">¥450</td></tr>
+    <tr class="bt-sub"><td colspan="3">🏨 住宿小计</td><td class="bt-amount">¥450</td></tr>
+  </table></div>
+
+  <div class="card"><h3>🎫 门票 & 玩乐</h3>
+  <table class="budget-table">
+    <tr><th>项目</th><th>单价</th><th>数量</th><th class="bt-amount">金额</th></tr>
+    <tr><td>大召寺 成人</td><td>¥35</td><td>×2</td><td class="bt-amount">¥70</td></tr>
+    <tr><td>五塔寺 成人</td><td>¥30</td><td>×2</td><td class="bt-amount">¥60</td></tr>
+    <tr><td>内蒙古博物院 / 美术馆</td><td>免费</td><td>—</td><td class="bt-amount">¥0</td></tr>
+    <tr><td>塞上老街 / 敕勒川草原</td><td>免费</td><td>—</td><td class="bt-amount">¥0</td></tr>
+    <tr><td>昭君博物院 成人（方案B可选）</td><td>¥60</td><td>×2</td><td class="bt-amount">¥120</td></tr>
+    <tr class="bt-sub"><td colspan="3">🎫 门票小计（含昭君）</td><td class="bt-amount">¥250</td></tr>
+  </table></div>
+
+  <div class="card"><h3>🍽️ 餐饮 & 🚕 交通 & 其他</h3>
+  <table class="budget-table">
+    <tr><th>项目</th><th>预算</th><th>天数</th><th class="bt-amount">金额</th></tr>
+    <tr><td>正餐+小吃（烧麦·涮肉·莜面·奶茶）</td><td>≈¥350/天</td><td>×2</td><td class="bt-amount">¥700</td></tr>
+    <tr><td>市内打车/地铁</td><td>≈¥60/天</td><td>×2</td><td class="bt-amount">¥120</td></tr>
+    <tr><td>火车站/机场往返</td><td>—</td><td>—</td><td class="bt-amount">¥80</td></tr>
+    <tr><td>奶制品·牛肉干·纪念品</td><td>—</td><td>—</td><td class="bt-amount">¥150</td></tr>
+    <tr class="bt-sub"><td colspan="3">🍽️🚕 小计</td><td class="bt-amount">¥1,050</td></tr>
+  </table></div>
+
+  <div class="highlight-box" style="margin-top:12px">
+    <h3>💰 总预算汇总</h3>
+    <table style="width:100%;color:#fff;font-size:13px;border-collapse:collapse">
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.15)"><td style="padding:6px 0">🚄 动车往返</td><td style="text-align:right;font-weight:700">≈¥954</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.15)"><td style="padding:6px 0">🏨 住宿 1 晚</td><td style="text-align:right;font-weight:700">¥450</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.15)"><td style="padding:6px 0">🎫 门票玩乐</td><td style="text-align:right;font-weight:700">¥250</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.15)"><td style="padding:6px 0">🍽️🚕 餐饮交通其他</td><td style="text-align:right;font-weight:700">¥1,050</td></tr>
+      <tr><td style="padding:10px 0;font-size:18px;font-weight:800">🎯 合计</td><td style="text-align:right;font-size:22px;font-weight:800">≈ ¥2,704</td></tr>
+    </table>
+    <p style="font-size:10px;opacity:0.7;margin-top:6px">弹性 ±10%，实际控制在 ¥2,400-2,900。动车票价以 12306 为准（约¥187-191/成人），餐饮丰俭由人。</p>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB 4: TIPS                     -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-tips" class="tab-content">
+
+  <div class="tip-grid">
+    <div class="tip-card"><h4>🧳 行李清单</h4>
+      <ul class="checklist">
+        <li><span class="box"></span> 身份证（乘车+博物馆预约用）</li>
+        <li><span class="box"></span> 遮阳帽·太阳镜·防晒霜</li>
+        <li><span class="box"></span> 薄外套（草原早晚温差大！）</li>
+        <li><span class="box"></span> 儿童水壶·高铁零食</li>
+        <li><span class="box"></span> 舒适运动鞋（老街步行）</li>
+        <li><span class="box"></span> 充电宝·数据线</li>
+        <li><span class="box"></span> 防蚊液（草原蚊虫多）</li>
+        <li><span class="box"></span> 晕车药·创可贴</li>
+        <li><span class="box"></span> 折叠伞（8月偶有阵雨）</li>
+        <li><span class="box"></span> 保温杯（装奶茶/热水）</li>
+      </ul>
+    </div>
+
+    <div class="tip-card"><h4>🚇 地铁 & 交通指南</h4>
+      <ul class="checklist">
+        <li><span class="box"></span> <strong>地铁1号线</strong>：东西横贯，呼和浩特东站 ↔ 内蒙古博物院 ↔ 呼和浩特站</li>
+        <li><span class="box"></span> <strong>地铁2号线</strong>：南北向，新华广场换乘</li>
+        <li><span class="box"></span> 支付宝/微信搜"呼和浩特地铁"扫码乘车</li>
+        <li><span class="box"></span> 呼和浩特东站→呼和浩特站：地铁1号线直达约30分钟</li>
+        <li><span class="box"></span> 打车也很方便，市区¥15-30/程</li>
+      </ul>
+    </div>
+
+    <div class="tip-card"><h4>👦 带娃注意</h4>
+      <ul class="checklist">
+        <li><span class="box"></span> 8月草原<strong>早晚温差大</strong>，务必带外套</li>
+        <li><span class="box"></span> 烧麦/羊杂碎偏咸偏油，孩子适量</li>
+        <li><span class="box"></span> 奶制品（奶皮子·奶酪）孩子一般喜欢</li>
+        <li><span class="box"></span> 大召广场可以喂鸽子，孩子开心</li>
+        <li><span class="box"></span> 草原蚊虫多，防蚊液随身带</li>
+        <li><span class="box"></span> 博物院是室内，冷气足，备薄衫</li>
+      </ul>
+    </div>
+
+    <div class="tip-card"><h4>🥟 美食打卡清单</h4>
+      <ul class="checklist">
+        <li><span class="box"></span> 🥇 <strong>羊肉烧麦</strong>——呼和浩特第一名片</li>
+        <li><span class="box"></span> 🥈 <strong>铜锅涮羊肉</strong>（额尔敦）——手切鲜羊肉</li>
+        <li><span class="box"></span> 🥉 <strong>莜面</strong>——窝窝/鱼鱼，孩子友好</li>
+        <li><span class="box"></span> 蒙古奶茶 + 奶皮子 + 奶酪</li>
+        <li><span class="box"></span> 羊杂碎 + 焙子（早餐标配）</li>
+        <li><span class="box"></span> 风干牛肉（当伴手礼）</li>
+        <li><span class="box"></span> 德顺源/老绥元烧麦（连锁稳）</li>
+      </ul>
+    </div>
+
+    <div class="tip-card"><h4>⚠️ 重要时间节点</h4>
+      <ul class="checklist">
+        <li><span class="box"></span> <strong>Day1 07:38</strong> 清河站 D1057 不误车</li>
+        <li><span class="box"></span> <strong>Day1 10:06</strong> 抵达呼和浩特东</li>
+        <li><span class="box"></span> <strong>Day2 09:00</strong> 博物院开馆即入</li>
+        <li><span class="box"></span> <strong>Day2 17:30前</strong> 从东站出发去呼和浩特站</li>
+        <li><span class="box"></span> <strong>Day2 20:03</strong> D1022 呼和浩特站发车</li>
+        <li><span class="box"></span> 博物院成人提前预约（16岁以下免预约）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Weather + Transit -->
+  <div class="card" style="margin-top:12px"><h3>🌤️ 天气 & 穿什么</h3>
+  <table style="width:100%;font-size:12px;border-collapse:collapse">
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 8px;font-weight:600">气温</td><td style="padding:5px 8px">白天 24-30°C，早晚 14-18°C</td></tr>
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 8px;font-weight:600">气候</td><td style="padding:5px 8px">干燥、昼夜温差大，草原更凉</td></tr>
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 8px;font-weight:600">穿搭</td><td style="padding:5px 8px">短袖 + 薄外套 + 运动鞋 + 帽子</td></tr>
+    <tr><td style="padding:5px 8px;font-weight:600">注意</td><td style="padding:5px 8px">8月偶有阵雨，出发前看天气预报</td></tr>
+  </table></div>
+
+  <div class="card"><h3>📞 实用信息</h3>
+  <table style="width:100%;font-size:12px;border-collapse:collapse">
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 8px;font-weight:600">清河站</td><td style="padding:4px 8px">海淀区 · 地铁13号线/昌平线</td></tr>
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 8px;font-weight:600">呼和浩特东站</td><td style="padding:4px 8px">新城区 · 地铁1号线</td></tr>
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 8px;font-weight:600">内蒙古博物院</td><td style="padding:4px 8px">新华东街76号 · 周二至周日9:00-17:00（暑期延时）· 官网 nmgbwy.cn 预约</td></tr>
+    <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 8px;font-weight:600">大召寺</td><td style="padding:4px 8px">玉泉区大召前街 · 门票¥35 · 开放约8:00-18:00</td></tr>
+    <tr><td style="padding:4px 8px;font-weight:600">出租车起步价</td><td style="padding:4px 8px">¥8/3km，市区景点间一般¥15-30</td></tr>
+  </table></div>
+
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<div class="footer">
+  ⛺🐎 呼和浩特2天1晚亲子游 · 8/15-8/16 · D1057/D1022 · <span id="update-time"></span>
+</div>
+
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.tab[data-tab="' + name + '"]').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  window.location.hash = name;
+}
+window.addEventListener('hashchange', function(){
+  var h = window.location.hash.replace('#','');
+  if (['overview','daily','budget','tips'].indexOf(h) !== -1) switchTab(h);
+});
+if (['overview','daily','budget','tips'].indexOf(window.location.hash.replace('#','')) !== -1) {
+  switchTab(window.location.hash.replace('#',''));
+}
+document.getElementById('update-time').textContent = '更新：2026-08-14 · 动车时刻以12306为准';
+</script>
+
+</body>
+</html>
